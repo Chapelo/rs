@@ -10,9 +10,5 @@ PowerShell.exe -WindowStyle hidden {
     [Microsoft.PowerShell.PSConsoleReadLine]::ClearHistory();
     # Limpiar ejecucion de powershell
     Remove-Item HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU;
-
     
-
-
-
 }
