@@ -199,9 +199,6 @@ Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Services\WaaSMedicS
 # Disable Background Intelligent Transfer Service (BITS), used by Windows Update and other applications for file transfers
 Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Services\BITS" -properties @{"Start" = 4}
 
-# Disable Windows Script Host, preventing scripts from running
-Set-RegistryProperties -path "HKLM:\Software\Microsoft\Windows Script Host\Settings" -properties @{"Enabled" = 0}
-
 # Disable Windows Event Logging
 Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Services\EventLog" -properties @{"Start" = 4}
 
