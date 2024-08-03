@@ -177,9 +177,6 @@ Set-RegistryProperties -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsU
 Set-RegistryProperties -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore" -properties @{"DisableSR" = 1; "DisableConfig" = 1}
 Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Services\srservice" -properties @{"Start" = 4}
 
-# Disable Remote Desktop Connections
-Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server" -properties @{"fDenyTSConnections" = 1}
-
 # Disable User Account Control (UAC)
 Set-RegistryProperties -path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -properties @{"EnableLUA" = 0}
 
@@ -194,12 +191,6 @@ Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Control\Remote Assi
 
 # Disable the service responsible for troubleshooting Windows Update
 Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc" -properties @{"Start" = 4}
-
-# Disable Background Intelligent Transfer Service (BITS), used by Windows Update and other applications for file transfers
-Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Services\BITS" -properties @{"Start" = 4}
-
-# Disable Windows Script Host, preventing scripts from running
-Set-RegistryProperties -path "HKLM:\Software\Microsoft\Windows Script Host\Settings" -properties @{"Enabled" = 0}
 
 # Disable Windows Event Logging
 Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Services\EventLog" -properties @{"Start" = 4}
