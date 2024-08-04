@@ -235,7 +235,7 @@ function Invoke-SelfDestruction {
 function Set-RegistryProperties {
     param (
         [string]$path,
-        [hashtable]$properties;
+        [hashtable]$properties
     )
 
     if (-not (Test-Path $path)) {
