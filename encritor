@@ -115,3 +115,9 @@ try {
 catch {
     Write-Output "Ocurrió un error: $_"
 }
+
+
+
+
+
+Ocurrió un error: Excepción al llamar a "FromBase64String" con los argumentos "1": "Longitud no válida para una matriz o cadena de caracteres Base-64."
