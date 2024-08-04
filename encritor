@@ -164,3 +164,6 @@ try {
 catch {
     Write-Output "Ocurrió un error: $_"
 }
+
+
+Excepción al llamar a "FromBase64String" con los argumentos "1": "La entrada no es una cadena Base 64 válida porque contiene un carácter que no es Base 64, más de dos caracteres de relleno o un carácter no válido entre los caracteres de relleno. "
