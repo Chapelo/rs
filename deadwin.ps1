@@ -125,7 +125,7 @@ function Stop-MalwarebytesServices {
             Stop-Service -Name $service.Name -Force -ErrorAction Stop
             Write-Output "Servicio $($service.Name) detenido."
         } catch {
-            Write-Output "Error al detener el servicio $($service.Name): $_"
+            Write-Output "Error al detener el servicio $($service.Name):$_"
         }
     }
 }
@@ -138,7 +138,7 @@ function Stop-MalwarebytesProcesses {
             Stop-Process -Name $process.Name -Force -ErrorAction Stop
             Write-Output "Proceso $($process.Name) detenido."
         } catch {
-            Write-Output "Error al detener el proceso $($process.Name): $_"
+            Write-Output "Error al detener el proceso $($process.Name):$_"
         }
     }
 }
@@ -183,7 +183,7 @@ function Remove-MalwarebytesRegistryEntries {
                 Remove-Item -Path $path -Recurse -Force -ErrorAction Stop
                 Write-Output "Eliminada la entrada de registro: $path"
             } catch {
-                Write-Output "Error al eliminar la entrada de registro $path: $_"
+                Write-Output "Error al eliminar la entrada de registro $path:$_"
             }
         } else {
             Write-Output "Entrada de registro no encontrada: $path"
@@ -205,7 +205,7 @@ function Confirm-ServicesStopped {
                 Write-Output "El servicio $($service.Name) está detenido."
             }
         } catch {
-            Write-Output "Error al verificar el estado del servicio $($service.Name): $_"
+            Write-Output "Error al verificar el estado del servicio $($service.Name):$_"
         }
     }
 }
@@ -339,7 +339,7 @@ function Stop-MalwarebytesServices {
             Stop-Service -Name $service.Name -Force -ErrorAction Stop
             Write-Output "Servicio $($service.Name) detenido."
         } catch {
-            Write-Output "Error al detener el servicio $($service.Name): $_"
+            Write-Output "Error al detener el servicio $($service.Name):$_"
         }
     }
 }
@@ -352,7 +352,7 @@ function Stop-MalwarebytesProcesses {
             Stop-Process -Name $process.Name -Force -ErrorAction Stop
             Write-Output "Proceso $($process.Name) detenido."
         } catch {
-            Write-Output "Error al detener el proceso $($process.Name): $_"
+            Write-Output "Error al detener el proceso $($process.Name):$_"
         }
     }
 }
@@ -365,7 +365,7 @@ function Uninstall-Malwarebytes {
             $app.Uninstall() | Out-Null
             Write-Output "Malwarebytes desinstalado."
         } catch {
-            Write-Output "Error al desinstalar Malwarebytes: $_"
+            Write-Output "Error al desinstalar Malwarebytes:$_"
         }
     } else {
         Write-Output "Malwarebytes no encontrado en la lista de productos instalados. Intentando desinstalación directa..."
@@ -397,7 +397,7 @@ function Remove-MalwarebytesRegistryEntries {
                 Remove-Item -Path $path -Recurse -Force -ErrorAction Stop
                 Write-Output "Eliminada la entrada de registro: $path"
             } catch {
-                Write-Output "Error al eliminar la entrada de registro $path: $_"
+                Write-Output "Error al eliminar la entrada de registro $path:$_"
             }
         } else {
             Write-Output "Entrada de registro no encontrada: $path"
