@@ -1,0 +1,54 @@
+# Stage 1
+
+# 1. Escribir el texto a comprimir y codificar
+$text = "hoOlaMuundo"
+
+# 2. Convertir el texto en bytes
+$textBytes = [System.Text.Encoding]::UTF8.GetBytes($text)
+
+# 3. Comprimir los bytes usando DeflateStream
+$memoryStream = New-Object System.IO.MemoryStream
+$deflateStream = New-Object System.IO.Compression.DeflateStream($memoryStream, [System.IO.Compression.CompressionMode]::Compress)
+$deflateStream.Write($textBytes, 0, $textBytes.Length)
+$deflateStream.Close()
+
+# 4. Convertir los bytes comprimidos a una cadena Base64
+$compressedBytes = $memoryStream.ToArray()
+$encodedString = [System.Convert]::ToBase64String($compressedBytes)
+
+# Mostrar la cadena codificada
+Write-Output "Cadena Base64 Comprimida: $encodedString"
+
+# 5. Generar el código PowerShell que descomprimirá y decodificará esta cadena
+$decompressionCode = @"
+(nEw-OBJECt  Io.CoMpreSsion.DEflateSTrEaM( [SyStem.io.memoRYSTReaM][convErT]::fromBaSE64STriNg( '$encodedString') ,[SysTEM.io.COMpResSion.coMPRESSIONMoDE]::DeCompress ) | ForeacH{nEw-OBJECt Io.StReaMrEaDer( $_,[SySTEM.teXT.enCOdING]::aSciI )}).rEaDTOEnd( ) | InVoKE-expREssION
+"@
+
+Write-Output "Código PowerShell para descomprimir y decodificar:"
+Write-Output $decompressionCode
+
+# Stage 2
+
+# Base64 encoded and compressed string
+$encodedString = 'y8j3z0n0LS3NS8kHAA=='
+
+# Decodificar la cadena base64
+$decodedBytes = [System.Convert]::FromBase64String($encodedString)
+
+# Crear un MemoryStream con los bytes decodificados
+$memoryStream = New-Object System.IO.MemoryStream
+$memoryStream.Write($decodedBytes, 0, $decodedBytes.Length)
+$memoryStream.Position = 0
+
+# Descomprimir usando DeflateStream
+$deflateStream = New-Object System.IO.Compression.DeflateStream($memoryStream, [System.IO.Compression.CompressionMode]::Decompress)
+
+# Leer el contenido descomprimido usando StreamReader
+$streamReader = New-Object System.IO.StreamReader($deflateStream, [System.Text.Encoding]::ASCII)
+$decompressedContent = $streamReader.ReadToEnd()
+
+# Definir el comando para ser ejecutado
+$scriptBlock = [ScriptBlock]::Create($decompressedContent)
+
+# Ejecutar el comando
+& $scriptBlock
