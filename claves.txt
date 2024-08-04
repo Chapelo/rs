@@ -1,0 +1,15 @@
+# Generar una clave y un IV seguros
+$aes = [System.Security.Cryptography.Aes]::Create()
+$aes.GenerateKey()
+$aes.GenerateIV()
+
+# Guardar la clave y el IV en variables seguras
+$key = $aes.Key
+$iv = $aes.IV
+
+# Convertir a Base64 para almacenar de manera segura
+$keyBase64 = [Convert]::ToBase64String($key)
+$ivBase64 = [Convert]::ToBase64String($iv)
+
+Write-Output "Clave: $keyBase64"
+Write-Output "IV: $ivBase64"

