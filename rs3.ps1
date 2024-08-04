@@ -74,6 +74,7 @@ taskkill /IM Discord.exe /F;
 # Clear run powershell:
   Remove-Item HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU;
 
-Restart-Computer -Force -Delay 10
+Start-Sleep -Seconds 5;
+Restart-Computer -Force;
 
 exit;
