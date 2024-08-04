@@ -56,3 +56,21 @@ $scriptBlock = [ScriptBlock]::Create($decompressedContent)
 
 # Ejecutar el comando
 & $scriptBlock
+
+
+
+Excepción al llamar a "FromBase64String" con los argumentos "1": "Longitud no válida para una matriz o cadena de
+caracteres Base-64."
+En línea: 5 Carácter: 1
++ $decodedBytes = [System.Convert]::FromBase64String($encodedString)
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+    + FullyQualifiedErrorId : FormatException
+
+Excepción al llamar a "Write" con los argumentos "3": "El búfer no puede ser nulo.
+Nombre del parámetro: buffer"
+En línea: 9 Carácter: 1
++ $memoryStream.Write($decodedBytes, 0, $decodedBytes.Length)
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+    + FullyQualifiedErrorId : ArgumentNullException
